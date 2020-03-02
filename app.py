@@ -55,7 +55,6 @@ def precipitation():
     dt1yrago =  (maxDate - pd.DateOffset(months=12)).date()
 
     # Perform a query to retrieve the data and precipitation scores
-    #selCols = [Measurement.id, Measurement.station, Measurement.date, Measurement.prcp, Measurement.tobs]
     selCols = [Measurement.date, Measurement.prcp]
     resultData =  session.query(*selCols).filter(Measurement.date >= dt1yrago).all()
 
@@ -71,11 +70,8 @@ def precipitation():
 @app.route("/api/v1.0/stations")
 def stations():
     session = Session(engine)
-    #selCols2 = [Measurement.station]
     resultData2 =  session.query(Station.station, Station.name)
     df_stn = pd.DataFrame(resultData2,columns=['station','name'])
-    #df_stn = df_stn.sort_values(by='count', ascending=False)
-    #df_stn.set_index('station')
     dict_stn = df_stn.replace({np.nan: None}).to_dict('records')    
     return jsonify(dict_stn)
 
